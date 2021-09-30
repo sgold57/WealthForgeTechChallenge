@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AddressDiv from './AddressDiv'
 import OrderItemsCell from './OrderItemsCell'
 import testData from './test_data/data.json'
+import CsvDownload from 'react-json-to-csv';
 import './App.css';
 
 export default class App extends Component {
@@ -12,7 +13,7 @@ export default class App extends Component {
 
   renderData() {
     return testData.map(data => {
-      const { 
+      const {
         order_id, 
         customer_id, 
         customer_first_name, 
@@ -24,7 +25,7 @@ export default class App extends Component {
       } = data;
       
       return (
-        <tr>
+        <tr key={order_id}>
           <td>{order_id}</td>
           <td>{customer_id}</td>
           <td>{customer_first_name}</td>
@@ -42,17 +43,6 @@ export default class App extends Component {
     })
   }
 
-  // exportData(){
-  //   let table = document.getElementsByClassName("main-table")
-  //   let rows = [];
-    
-  //   for (let row in table[0]){
-  //     console.log(row);
-  //   }
-
-  // }
-
-  
   
   render(){
     return (
@@ -73,11 +63,11 @@ export default class App extends Component {
             {this.renderData()}
           </tbody>
         </table>
-        <button 
-          // onClick={this.exportData} 
-          className="download-btn"
-        >Download</button>
+        <div>
+          <CsvDownload data={testData}>Download Json</CsvDownload>
+        </div>
       </div>
     );
   }
 }
+
