@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import AddressDiv from './AddressDiv'
-import OrderItemsCell from './OrderItemsCell'
-import testData from './test_data/data.json'
+import AddressDiv from './AddressDiv';
+import OrderItemsCell from './OrderItemsCell';
+import testData from './test_data/data.json';
 import CsvDownload from 'react-json-to-csv';
 import './App.css';
 
 export default class App extends Component {
 
-  componentDidMount(){
-    console.log(testData)
+  state = {
+    startIndex: 0,
+    endIndex: 2
   }
 
-  renderData() {
-    return testData.map(data => {
+  renderData(startIndex, endIndex) {
+    return testData.slice(startIndex, endIndex).map(data => {
       const {
         order_id, 
         customer_id, 
@@ -43,6 +44,7 @@ export default class App extends Component {
     })
   }
 
+
   
   render(){
     return (
@@ -60,12 +62,33 @@ export default class App extends Component {
               <th>Order Date</th>
               <th>Order Items</th>
             </tr>
-            {this.renderData()}
+            {this.renderData(this.state.startIndex, this.state.endIndex)}
           </tbody>
         </table>
         <div>
           <CsvDownload data={testData}>Download Json</CsvDownload>
         </div>
+        <button 
+          onClick={() => {
+            if (this.state.startIndex !== 0){
+              let newEndIndex = this.state.startIndex
+              this.setState({
+                startIndex: newEndIndex - 2,
+                endIndex: newEndIndex
+              }
+            )}}}>
+          PREVIOUS
+        </button>
+        <button
+          onClick={() => {
+            if (this.state.endIndex <= testData.length){
+              let newStartIndex = this.state.endIndex
+              this.setState({
+              startIndex: newStartIndex,
+              endIndex: newStartIndex + 2
+            })}}}>
+          NEXT
+        </button>
       </div>
     );
   }
